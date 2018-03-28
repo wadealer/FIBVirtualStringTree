@@ -1,0 +1,163 @@
+TDBVirtualStringTree - наследник от VirtualStringTree.
+Сам  VirtualStringTree. брать на  www.lischke-online.de.
+
+
+Основные возможности:
+  Дерево, которое подкачивает данные по распахиванию узла.
+  Редактируемое.
+  С методами фильтрации, и поиска по дереву.
+  Драг энд дроп.
+  Возможность режима дерева с чекбоксами.
+
+Описание.
+ Дополнительные проперти к  VirtualStringTree.
+ 
+ImageIndexes
+  ExpandedImage - индекс в имэдж листе для пиктограммки обозначающей 
+                  распахнутый узел
+  CollapsedImage- индекс пиктограммки закрытого, имеющего детей узла
+  ChildImage    - индекс пиктограммки не  имеющего детей узла
+
+DBOptions
+  IDField - имя поля с ID узла
+  IDParentParam - имя параметра обозначающего парента в запросе для получения
+                  всех детей некоего узла
+  LookFields     :TStrings
+                - список имен полей которые будут отображаться в дереве
+
+  HasChildField - имя поля  в котором содержится инфа о том имеет ли текущий 
+                  узел    детей. (параметр необязателен)
+  InitialParentValue
+                - значение родителя для самых корневых узлов (по умолчанию 0) 
+
+  AutoCreateColumns
+                - флаг создавать ли колонки для LookFields автоматом
+  MaxAutoWidth  - Максимальный предел ширины автоматически создаваемых колонок
+
+  ModifyKinds   - флаги отвечающие за возможность редактирования дерева.
+
+  Source        :IDBRetrieveData 
+                - источник откуда будет браться данные для заполнения дерева.
+                должен поддерживать вышеуказанный интерфейс, для того чтоб дерево 
+                могло модифицироваться источник так же должен поддерживать
+                интерфейс IDBModifyData.
+
+         (Примеры таких источников базирующихся на FIBPlus в юните FIBVTreeCmps.pas 
+         из  пакеджа FIBVTreeComponents.dpk )
+Методы
+procedure   LoadTree;
+ 
+ Начальная загрузка первичных узлов.
+ Проверяет  Source . Вычищает дерево. Вызывает у Source методы :
+   IClose;
+   ISetParamValue(IDParentParam,ParamValue);
+   IOpen;                
+ Где параметром передает DBOptions.InitialParentValue
+ Далее забирает результат  остальными методами Source и заполняет дерево.
+
+function    LoadChild(ParentNode:PVirtualNode):integer;
+ Подгрузка детей узла указанного во входном параметре. Вызывается автоматом при
+ распахивании узла, если он не был распахнут ранее.
+
+function    RecordId:integer;
+ Возвращает ID текущего узла
+
+function    ParentId:integer;
+ Возвращает ParentID текущего узла 
+
+procedure   ExpandParents(Node:PVirtualNode);
+ Распахивает всех родителей указанного узла
+function    FindNode(aRecordId:integer):PVirtualNode; overload;
+ поиск узла по его ID. (c контролом ничего не происходит. 
+ На найденный узел никто не фокусируется)
+
+function    FindNode(StartNode:PVirtualNode;const Fields:string;FilterValues:variant;LocateOptions:TLocateOptions):PVirtualNode; overload;
+ поиск узла по условию. Действие аналогичное предыдущему.
+ (по многим полям пока не работает)
+
+function    LocateById(aRecordId:integer):boolean;
+ поиск и позиционирование в случае если нашли
+
+function    Locate(const Fields:string;FilterValues:variant;LocateOptions:TLocateOptions):boolean;
+ поиск по не ID полю.  позиционирование в случае если нашли
+
+function    LocateNext(const Fields:string;FilterValues:variant;LocateOptions:TLocateOptions):boolean;
+ поиск начиная  с текущего узла вниз.
+
+function    LocateByPath(Path :array of integer):boolean; overload;
+function    LocateByPath(const Path :string):boolean; overload;
+Поиски и позиционирование по пути. Во втором случае путь передается как
+ 0.1.2.13.3 
+
+function    CacheEdit(aRecordId:integer;
+     const Fields: array of string; const Values:array of variant
+):boolean;
+    function    CacheInsert(aParentId,aRecordId:integer;
+     const Fields: array of string;  const Values:array of variant
+    ):boolean;
+    function    CacheDelete(aRecordId:integer):boolean;
+
+Модификации текущего узла без отправления изменений в базу
+
+function    CurrentHasChild:boolean;
+имеет ли текущий узел детей. (даже если дети еще не подгружены)
+
+function    DeleteCurrentRecord:boolean;
+Удалить текущий узел. (дети из контрола удалятся. В базе придется удалять или 
+ эксептить триггером)
+procedure   Insert;
+Заинсертить ноду.
+
+function    IsVisibleRecord(aRecordId:integer):boolean;
+узнать видим ли узел с указанным ID
+
+
+function    NodeId(Node:PVirtualNode):integer;
+ ID указанной ноды
+
+
+function    HasCheckedNode:boolean;
+имеются ли  "чекнутые" ноды. 
+
+property    CheckedCount:Integer 
+сколько нод "чекнуто"
+
+CheckedNode[Index:integer]:PVirtualNode
+ссылка на "чекнутую ноду" с указанным индексом. 
+
+Эвенты
+  DBOnChangeCurrentRecord:
+    procedure (Sender: TDBVirtualStringTree; RecordId:integer)
+  возникает при перемещении курсора с узла на узел. RecordId - ID текущего узла
+
+  DBBeforeDeleteRecord - перед удалением
+  DBAfterDeleteRecord  - после удаления
+  DBBeforeEditRecord   - перед редактированием
+  DBAfterEditRecord    - после редактирования
+
+  DBOnFilterRecord :procedure (Sender: TDBVirtualStringTree; RecordId:integer;var Accept:boolean)
+    активизируется для каждого узла сразу же после перевода дерева в состояние отфильтрованности. 
+
+    в нем манипулируя флагом Accept переводим узел в состояние видимости или невидимости.       
+
+  DBBeforeFiltered-
+   procedure (Sender: TDBVirtualStringTree;DoFiltered:boolean) of object;
+  Возникает перед переводом дерева в состояние фильтрованности или наоборот.
+  (В нем можно провести некие подготовительные операции. ) 
+
+  DBAfterFiltered 
+   возникает после перевода дерева в состояние фильтрованности.
+   (в демке на нем прописана фокусация на первый узел напрямую 
+    удовлетворяющий условию  фильтрации)
+
+  DBOnFindNode 
+   - вызывается во время исполнения FindNode. Используется для того чтоб сообщить
+     поиску стоит ли распахивать текущий узел, или среди детей этого узла нет искомого.          
+
+  DBBeforeLocate
+   - перед Locate. Для вызова подготовительных к локэйту действий
+  DBAfterLocate
+   - после Locate. До кучи.
+ 
+
+Как со всем этим можно взлететь смотрите и читайте в демке.
