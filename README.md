@@ -17,5 +17,8 @@
     component and claim that it was your idea.                 
                                                                
     It is also NOT allowed to remove or change the text of     
-    this description!                                          
+    this description!
+
+
+### For now VirtualStringTree 5.5.x is supported.                                         
                                                                
