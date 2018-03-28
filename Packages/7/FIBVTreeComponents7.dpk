@@ -33,6 +33,6 @@ requires
   DBVT7;
 
 contains
-  FIBVTreeCmps in '..\Src\FIBVTreeCmps.pas';
+  FIBVTreeCmps in '..\..\Src\FIBVTreeCmps.pas';
 
 end.

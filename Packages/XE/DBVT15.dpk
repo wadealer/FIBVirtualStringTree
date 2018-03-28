@@ -30,11 +30,11 @@ requires
   vcl,
   designide,
   dbrtl,
-  VirtualTreesD15;
+  VirtualTreesD;
 
 contains
-  DBVirtualStringTree in '..\Src\DBVirtualStringTree.pas',
-  RegDBVTree in '..\Src\RegDBVTree.pas',
-  RDIntfs in '..\Src\RDIntfs.pas';
+  DBVirtualStringTree in '..\..\Src\DBVirtualStringTree.pas',
+  RegDBVTree in '..\..\Src\RegDBVTree.pas',
+  RDIntfs in '..\..\Src\RDIntfs.pas';
 
 end.

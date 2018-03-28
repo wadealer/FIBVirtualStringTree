@@ -1,5 +1,5 @@
 {***************************************************************}
-{  TDBVirtualStringTree - DB TreeView for Delphi 6,7            }
+{  TDBVirtualStringTree - DB TreeView for Delphi                }
 {                                                               }
 {    TDBVirtualStringTree is a descendant of                    }
 {    TVirtualStringTree component released September 30, 2000   }
