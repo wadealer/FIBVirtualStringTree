@@ -603,7 +603,7 @@ function TDBVirtualStringTree.DoInitChildren(Node: PVirtualNode;
   var ChildCount: Cardinal): boolean;
 begin
  ChildCount:=LoadChild(Node);
- Result := inherited;
+ Result := inherited DoInitChildren(Node, ChildCount);
 end;
 
 function    TDBVirtualStringTree.LoadChild(ParentNode: PVirtualNode):integer;
