@@ -1,5 +1,5 @@
 {***************************************************************}
-{  TDBVirtualStringTree - DB TreeView for Delphi            }
+{  TDBVirtualStringTree - DB TreeView for Delphi 6,7            }
 {                                                               }
 {    TDBVirtualStringTree is a descendant of                    }
 {    TVirtualStringTree component released September 30, 2000   }
@@ -186,8 +186,8 @@ type
     procedure Notification(AComponent: TComponent;  Operation: TOperation); override;
     procedure KeyUp(var Key: Word; Shift: TShiftState); override;
     procedure DoOnDlgFind(Sender:TObject);dynamic;
-    procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-      var Text: WideString); override;
+    procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;  var Text: UnicodeString); override;
+
     function DoChecking(Node: PVirtualNode; var NewCheckState: TCheckState): boolean;override;
 
     procedure DoExpanded(Node: PVirtualNode); override;
@@ -208,10 +208,10 @@ type
      var FieldNames: PVarArray; var Values    : PVarArray
     );
 
-    procedure DoNewText(Node: PVirtualNode; Column: TColumnIndex; Text: WideString); override;
+    procedure DoNewText(Node: PVirtualNode; Column: TColumnIndex; Text: UnicodeString); override;
     function  DoNodeCopying(Node, NewParent: PVirtualNode): Boolean; override;
 
-    function  CanEdit(Node: PVirtualNode; Column: TColumnIndex): Boolean; override;
+
     procedure DoDragDrop(Source: TObject; DataObject: IDataObject; Formats: TFormatArray; Shift: TShiftState; Pt: TPoint;
       var Effect: Integer; Mode: TDropMode); override;
     function  DoReplaceParent(Node, NewParent: PVirtualNode):Boolean;
@@ -270,6 +270,7 @@ type
     property    FindDlg: TFindDialog read FFindDlg;
     property    CheckedNode[Index:integer]:PVirtualNode read GetCheckedNode;
     property    CheckedCount:Integer read GetCheckedCount;
+    function  CanEdit(Node: PVirtualNode; Column: TColumnIndex): Boolean; override;
   published
     property DBOptions:TDBOptions read FDBOptions write SetDBOptions;
     property ImageIndexes:TVTImageIndexes read FImageIndexes write FImageIndexes;
@@ -575,7 +576,7 @@ begin
 end;  }
 
 procedure TDBVirtualStringTree.DoGetText(Node: PVirtualNode;
-  Column: TColumnIndex; TextType: TVSTTextType; var Text: WideString);
+  Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString);
 var
   Data: PNodeData;
   v   : variant ;
@@ -1074,7 +1075,7 @@ begin
 end;
 
 procedure TDBVirtualStringTree.DoNewText(Node: PVirtualNode;
-  Column: TColumnIndex; Text: WideString);
+  Column: TColumnIndex; Text: UnicodeString);
 var
   Data: PNodeData;
   FieldNames:array of variant;
@@ -1935,3 +1936,4 @@ begin
 end;
 
 end.
+
