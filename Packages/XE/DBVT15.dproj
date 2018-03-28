@@ -30,7 +30,6 @@
 			<DCC_ImageBase>00400000</DCC_ImageBase>
 			<DCC_DependencyCheckOutputName>C:\Users\Public\Documents\RAD Studio\7.0\Bpl\DBVT15.bpl</DCC_DependencyCheckOutputName>
 			<DCC_Description>DB Virtual TreeView</DCC_Description>
-			<DesignOnlyPackage>false</DesignOnlyPackage>
 			<GenDll>true</GenDll>
 			<GenPackage>true</GenPackage>
 		</PropertyGroup>
