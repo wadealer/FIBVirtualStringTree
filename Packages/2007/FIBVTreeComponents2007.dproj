@@ -28,11 +28,12 @@
     <DelphiCompile Include="FIBVTreeComponents2007.dpk">
       <MainSource>MainSource</MainSource>
     </DelphiCompile>
-    <DCCReference Include="$(SystemRoot)\system32\dbrtl.dcp" />
-    <DCCReference Include="$(SystemRoot)\system32\DBVT2007.dcp" />
-    <DCCReference Include="$(SystemRoot)\system32\FIBPlus2007.dcp" />
-    <DCCReference Include="$(SystemRoot)\system32\rtl.dcp" />
-    <DCCReference Include="$(SystemRoot)\system32\vcl.dcp" />
+    <DCCReference Include="..\..\Src\FIBVTreeCmps.pas" />
+    <DCCReference Include="dbrtl.dcp" />
+    <DCCReference Include="DBVT2007.dcp" />
+    <DCCReference Include="FIBPlus2007.dcp" />
     <DCCReference Include="FIBVTreeCmps.pas" />
+    <DCCReference Include="rtl.dcp" />
+    <DCCReference Include="vcl.dcp" />
   </ItemGroup>
 </Project>
