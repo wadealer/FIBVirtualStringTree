@@ -192,7 +192,7 @@ type
 
     procedure DoExpanded(Node: PVirtualNode); override;
     function  DoExpanding(Node: PVirtualNode): Boolean; override;
-    procedure DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal); override;
+    function  DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal): boolean; override;
     procedure DoFreeNode(Node: PVirtualNode); override;
 {
     procedure DoGetImageIndex(Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
@@ -599,11 +599,11 @@ begin
   inherited;
 end;
 
-procedure TDBVirtualStringTree.DoInitChildren(Node: PVirtualNode;
-  var ChildCount: Cardinal);
+function TDBVirtualStringTree.DoInitChildren(Node: PVirtualNode;
+  var ChildCount: Cardinal): boolean;
 begin
  ChildCount:=LoadChild(Node);
- inherited;
+ Result := inherited;
 end;
 
 function    TDBVirtualStringTree.LoadChild(ParentNode: PVirtualNode):integer;
